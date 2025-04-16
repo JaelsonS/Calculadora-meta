@@ -360,7 +360,7 @@
                 <h2 class="titulo-resultado">Resultado de Performance</h2>
                 <div class="valor-resultado"><span id="porcentagemResultado"></span>%</div>
                 
-                <img src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Sucesso nos negócios" class="imagem-motivacional">
+                <img id="imagemResultado" src="" alt="Resultado de desempenho" class="imagem-motivacional">
                 
                 <div class="info-multiplicador">
                     <strong>Faixa de Multiplicador:</strong> <span id="faixaMultiplicador"></span>
@@ -419,6 +419,16 @@
             const botaoCalcular = document.getElementById('botaoCalcular');
             const containerResultado = document.getElementById('containerResultado');
             const nomeVendedorInput = document.getElementById('nomeVendedor');
+            const imagemResultado = document.getElementById('imagemResultado');
+            
+            // URLs das imagens para cada faixa de desempenho
+            const IMAGENS = {
+                abaixo: 'https://images.unsplash.com/photo-1545167622-3a6ac756afa4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+                media: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+                boa: 'https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+                excelente: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+                excepcional: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
+            };
             
             tipoVendedorRadios.forEach(radio => {
                 radio.addEventListener('change', function() {
@@ -481,35 +491,44 @@
                 
                 let faixaMultiplicador, valorMultiplicador;
                 let linhaDestaque = '';
+                let imagemSelecionada = '';
                 
                 if (porcentagem < 100) {
                     faixaMultiplicador = "Abaixo de 100%";
                     valorMultiplicador = "1.0x";
+                    imagemSelecionada = IMAGENS.abaixo;
                 } else if (porcentagem >= 100 && porcentagem < 110) {
                     faixaMultiplicador = "100% - 109.99%";
                     valorMultiplicador = "1.0x";
                     linhaDestaque = 'linha1';
+                    imagemSelecionada = IMAGENS.media;
                 } else if (porcentagem >= 110 && porcentagem < 130) {
                     faixaMultiplicador = "110% - 129.99%";
                     valorMultiplicador = "1.2x";
                     linhaDestaque = 'linha2';
+                    imagemSelecionada = IMAGENS.boa;
                 } else if (porcentagem >= 130 && porcentagem < 140) {
                     faixaMultiplicador = "130% - 139.99%";
                     valorMultiplicador = "1.3x";
                     linhaDestaque = 'linha3';
+                    imagemSelecionada = IMAGENS.excelente;
                 } else if (porcentagem >= 140 && porcentagem < 150) {
                     faixaMultiplicador = "140% - 149.99%";
                     valorMultiplicador = "1.4x";
                     linhaDestaque = 'linha4';
+                    imagemSelecionada = IMAGENS.excelente;
                 } else {
                     faixaMultiplicador = "150% ou mais";
                     valorMultiplicador = "1.5x";
                     linhaDestaque = 'linha5';
+                    imagemSelecionada = IMAGENS.excepcional;
                 }
                 
                 document.getElementById('porcentagemResultado').textContent = porcentagem;
                 document.getElementById('faixaMultiplicador').textContent = faixaMultiplicador;
                 document.getElementById('valorMultiplicador').textContent = valorMultiplicador;
+                imagemResultado.src = imagemSelecionada;
+                imagemResultado.alt = `Desempenho ${porcentagem}% - ${faixaMultiplicador}`;
                 
                 for (let i = 1; i <= 5; i++) {
                     document.getElementById('linha' + i).classList.remove('destaque');
