@@ -263,6 +263,58 @@
             margin-bottom: 10px;
         }
         
+        .imagem-motivacional {
+            width: 100%;
+            max-width: 300px;
+            margin: 20px auto;
+            display: block;
+            border-radius: 8px;
+            position: relative;
+        }
+        
+        .frase-imagem {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            background-color: rgba(0,0,0,0.7);
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 0 0 8px 8px;
+        }
+        
+        .video-motivacional {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            margin: 20px auto;
+            display: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .mensagem-video {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+            color: var(--azul-praso);
+            display: none;
+        }
+        
+        .lacrou {
+            font-size: 28px;
+            color: #FF5722;
+            text-transform: uppercase;
+            animation: pulse 1s infinite alternate;
+        }
+        
+        .mostrar {
+            display: block;
+        }
+        
         @media (min-width: 400px) {
             .duas-colunas {
                 grid-template-columns: 1fr 1fr;
@@ -277,11 +329,24 @@
                 box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
                 border-radius: 8px;
             }
+            
+            .imagem-motivacional {
+                max-width: 400px;
+            }
+            
+            .video-motivacional {
+                max-width: 500px;
+            }
         }
         
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
+        }
+        
+        @keyframes pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
         }
     </style>
 </head>
@@ -373,6 +438,21 @@
                     <span id="textoCalculo"></span>
                 </div>
                 
+                <video id="videoExcepcional" class="video-motivacional" loop muted playsinline>
+                    <source src="Arquivos/jeff.mp4" type="video/mp4">
+                    Seu navegador não suporta vídeos HTML5.
+                </video>
+                
+                <div id="mensagemVideo" class="mensagem-video">
+                    <div>PARABÉNS, <span id="nomeVendedorResultado"></span>!</div>
+                    <div class="lacrou">LACROU!</div>
+                </div>
+                
+                <div id="containerImagem" class="mostrar">
+                    <img id="imagemResultado" src="" alt="Resultado de desempenho" class="imagem-motivacional">
+                    <div id="fraseImagem" class="frase-imagem"></div>
+                </div>
+                
                 <div class="info-multiplicador">
                     <strong>Faixa de Multiplicador:</strong> <span id="faixaMultiplicador"></span>
                     <br>
@@ -430,6 +510,31 @@
             const containerResultado = document.getElementById('containerResultado');
             const nomeVendedorInput = document.getElementById('nomeVendedor');
             const valorComissaoInput = document.getElementById('valorComissao');
+            const imagemResultado = document.getElementById('imagemResultado');
+            const videoExcepcional = document.getElementById('videoExcepcional');
+            const mensagemVideo = document.getElementById('mensagemVideo');
+            const fraseImagem = document.getElementById('fraseImagem');
+            const containerImagem = document.getElementById('containerImagem');
+            const nomeVendedorResultado = document.getElementById('nomeVendedorResultado');
+            
+            const IMAGENS = {
+                abaixo: {
+                    url: 'https://img.freepik.com/fotos-gratis/retrato-de-mulher-mostrando-emocoes-fortes-representando-saude-mental_23-2151718772.jpg?uid=R188991667&ga=GA1.1.561515967.1740640690&semt=ais_hybrid&w=740',
+                    frase: 'Não desista! Vamos melhorar juntos!'
+                },
+                media: {
+                    url: 'https://img.freepik.com/fotos-gratis/jovem-entregador-de-uniforme-vermelho-e-bone-relaxando-com-os-olhos-fechados-fazendo-gestos-de-meditacao-com-os-dedos_141793-46413.jpg?uid=R188991667&ga=GA1.1.561515967.1740640690&semt=ais_hybrid&w=740',
+                    frase: 'Alívio! Meta entregue!'
+                },
+                boa: {
+                    url: 'https://img.freepik.com/fotos-gratis/garota-homossexual-dancando-rindo-levantando-as-maos-e-celebrando-o-conceito-lgbtq-do-mes-do-orgulho-se-divertindo-em-pe-no-branco_176420-39669.jpg?uid=R188991667&ga=GA1.1.561515967.1740640690&semt=ais_hybrid&w=740',
+                    frase: 'Isso aí! Comemorando o sucesso!'
+                },
+                excelente: {
+                    url: 'https://img.freepik.com/fotos-gratis/jovem-hispanica-vestindo-roupas-casuais-animadas-para-o-sucesso-com-os-bracos-levantados-e-os-olhos-fechados-comemorando-a-vitoria-sorrindo-conceito-de-vencedor_839833-19430.jpg?uid=R188991667&ga=GA1.1.561515967.1740640690&semt=ais_hybrid&w=740',
+                    frase: 'Incrível! Performance excepcional!'
+                }
+            };
             
             tipoVendedorRadios.forEach(radio => {
                 radio.addEventListener('change', function() {
@@ -503,33 +608,56 @@
                 let faixaMultiplicador, valorMultiplicador;
                 multiplicadorNumerico = 1.0;
                 
+                videoExcepcional.classList.remove('mostrar');
+                mensagemVideo.classList.remove('mostrar');
+                containerImagem.classList.add('mostrar');
+                videoExcepcional.pause();
+                videoExcepcional.currentTime = 0;
+                
                 if (porcentagem < 100) {
                     faixaMultiplicador = "Abaixo de 100%";
                     valorMultiplicador = "1.0x";
                     multiplicadorNumerico = 1.0;
+                    imagemSelecionada = IMAGENS.abaixo.url;
+                    fraseSelecionada = IMAGENS.abaixo.frase;
                 } else if (porcentagem >= 100 && porcentagem < 110) {
                     faixaMultiplicador = "100% - 109.99%";
                     valorMultiplicador = "1.0x";
                     multiplicadorNumerico = 1.0;
+                    linhaDestaque = 'linha1';
+                    imagemSelecionada = IMAGENS.media.url;
+                    fraseSelecionada = IMAGENS.media.frase;
                 } else if (porcentagem >= 110 && porcentagem < 130) {
                     faixaMultiplicador = "110% - 129.99%";
                     valorMultiplicador = "1.2x";
                     multiplicadorNumerico = 1.2;
-                } else if (porcentagem >= 130 && porcentagem < 140) {
-                    faixaMultiplicador = "130% - 139.99%";
+                    linhaDestaque = 'linha2';
+                    imagemSelecionada = IMAGENS.boa.url;
+                    fraseSelecionada = IMAGENS.boa.frase;
+                } else if (porcentagem >= 130 && porcentagem < 150) {
+                    faixaMultiplicador = "130% - 149.99%";
                     valorMultiplicador = "1.3x";
                     multiplicadorNumerico = 1.3;
-                } else if (porcentagem >= 140 && porcentagem < 150) {
-                    faixaMultiplicador = "140% - 149.99%";
-                    valorMultiplicador = "1.4x";
-                    multiplicadorNumerico = 1.4;
+                    linhaDestaque = 'linha3';
+                    imagemSelecionada = IMAGENS.excelente.url;
+                    fraseSelecionada = IMAGENS.excelente.frase;
                 } else {
                     faixaMultiplicador = "150% ou mais";
                     valorMultiplicador = "1.5x";
                     multiplicadorNumerico = 1.5;
+                    linhaDestaque = 'linha5';
+                    
+                    videoExcepcional.classList.add('mostrar');
+                    mensagemVideo.classList.add('mostrar');
+                    containerImagem.classList.remove('mostrar');
+                    
+                    videoExcepcional.load();
+                    videoExcepcional.play().catch(e => console.log("Autoplay não permitido:", e));
+                    
+                    nomeVendedorResultado.textContent = nomeVendedor;
                 }
                 
-                
+                // Cálculo da comissão final
                 let comissaoCalculada;
                 let textoCalculo;
                 
@@ -541,31 +669,36 @@
                     textoCalculo = `${formatarMoeda(valorComissaoBase)} × ${porcentagem}% × ${multiplicadorNumerico}x = ${formatarMoeda(comissaoCalculada)}`;
                 }
                 
-                
+                // Exibe os resultados
                 document.getElementById('porcentagemResultado').textContent = porcentagem;
                 document.getElementById('faixaMultiplicador').textContent = faixaMultiplicador;
                 document.getElementById('valorMultiplicador').textContent = valorMultiplicador;
                 document.getElementById('valorComissaoCalculada').textContent = formatarMoeda(comissaoCalculada);
                 document.getElementById('textoCalculo').textContent = textoCalculo;
                 
+                // Define a imagem motivacional
+                if (porcentagem < 150) {
+                    imagemResultado.src = imagemSelecionada;
+                    fraseImagem.textContent = fraseSelecionada;
+                }
                 
+                // Destaca a linha da tabela
                 for (let i = 1; i <= 5; i++) {
                     document.getElementById('linha' + i).classList.remove('destaque');
                 }
                 
-                if (porcentagem >= 100) {
-                    const linha = Math.min(Math.floor((porcentagem - 100) / 10) + 1, 5);
-                    document.getElementById('linha' + linha).classList.add('destaque');
+                if (linhaDestaque) {
+                    document.getElementById(linhaDestaque).classList.add('destaque');
                 }
                 
-                
+                // Mensagem personalizada
                 const mensagemElemento = document.getElementById('mensagem');
                 mensagemElemento.className = 'mensagem';
                 
                 if (porcentagem < 80) {
                     mensagemElemento.classList.add('erro');
                     mensagemElemento.innerHTML = `<strong>Precisamos melhorar, ${nomeVendedor}!</strong><br>
-                        Seu desempenho está abaixo do esperado (${porcentagem}%). Sua comissão será proporcional: ${formatarMoeda(comissaoCalculada)}.<br>
+                        Seu desempenho está abaixo do esperado (${porcentagem}%). Sua comissão será: ${formatarMoeda(comissaoCalculada)}.<br>
                         Vamos analisar juntos onde podemos melhorar!`;
                 } else if (porcentagem >= 80 && porcentagem < 100) {
                     mensagemElemento.classList.add('aviso');
@@ -581,7 +714,7 @@
                 
                 containerResultado.style.display = 'block';
                 
-                
+                // Rolagem suave para o resultado
                 setTimeout(() => {
                     containerResultado.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                 }, 100);
@@ -589,7 +722,7 @@
             
             botaoCalcular.addEventListener('click', calcularMeta);
             
-        
+            // Permite calcular pressionando Enter
             document.querySelectorAll('.entrada-texto, .entrada-numero').forEach(input => {
                 input.addEventListener('keypress', function(e) {
                     if (e.key === 'Enter') {
