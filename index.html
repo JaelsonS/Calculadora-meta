@@ -657,7 +657,7 @@
                     nomeVendedorResultado.textContent = nomeVendedor;
                 }
                 
-                // Cálculo da comissão final
+                
                 let comissaoCalculada;
                 let textoCalculo;
                 
@@ -669,20 +669,20 @@
                     textoCalculo = `${formatarMoeda(valorComissaoBase)} × ${porcentagem}% × ${multiplicadorNumerico}x = ${formatarMoeda(comissaoCalculada)}`;
                 }
                 
-                // Exibe os resultados
+                
                 document.getElementById('porcentagemResultado').textContent = porcentagem;
                 document.getElementById('faixaMultiplicador').textContent = faixaMultiplicador;
                 document.getElementById('valorMultiplicador').textContent = valorMultiplicador;
                 document.getElementById('valorComissaoCalculada').textContent = formatarMoeda(comissaoCalculada);
                 document.getElementById('textoCalculo').textContent = textoCalculo;
                 
-                // Define a imagem motivacional
+                
                 if (porcentagem < 150) {
                     imagemResultado.src = imagemSelecionada;
                     fraseImagem.textContent = fraseSelecionada;
                 }
                 
-                // Destaca a linha da tabela
+                
                 for (let i = 1; i <= 5; i++) {
                     document.getElementById('linha' + i).classList.remove('destaque');
                 }
@@ -691,7 +691,7 @@
                     document.getElementById(linhaDestaque).classList.add('destaque');
                 }
                 
-                // Mensagem personalizada
+                
                 const mensagemElemento = document.getElementById('mensagem');
                 mensagemElemento.className = 'mensagem';
                 
@@ -714,7 +714,7 @@
                 
                 containerResultado.style.display = 'block';
                 
-                // Rolagem suave para o resultado
+                
                 setTimeout(() => {
                     containerResultado.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                 }, 100);
@@ -722,7 +722,7 @@
             
             botaoCalcular.addEventListener('click', calcularMeta);
             
-            // Permite calcular pressionando Enter
+            
             document.querySelectorAll('.entrada-texto, .entrada-numero').forEach(input => {
                 input.addEventListener('keypress', function(e) {
                     if (e.key === 'Enter') {
