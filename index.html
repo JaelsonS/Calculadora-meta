@@ -413,7 +413,11 @@
                 <div class="valor-resultado"><span id="porcentagemResultado"></span>%</div>
                 
                 <video id="videoExcepcional" class="video-motivacional" autoplay loop muted playsinline>
+<<<<<<< HEAD
                     <source src="Arquivos/jeff.mp4" type="video/mp4">
+=======
+                    <source src="https://assets.mixkit.co/videos/preview/mixkit-happy-businessman-dancing-1493-large.mp4" type="video/mp4">
+>>>>>>> 4e653f35bc0f019cb7d799f57e9e33fa17beee59
                     Seu navegador não suporta vídeos HTML5.
                 </video>
                 
@@ -422,7 +426,11 @@
                     <div class="lacrou">LACROU!</div>
                 </div>
                 
+<<<<<<< HEAD
                 <div id="containerImagem" class="mostrar">
+=======
+                <div id="containerImagem">
+>>>>>>> 4e653f35bc0f019cb7d799f57e9e33fa17beee59
                     <img id="imagemResultado" src="" alt="Resultado de desempenho" class="imagem-motivacional">
                     <div id="fraseImagem" class="frase-imagem"></div>
                 </div>
@@ -490,6 +498,7 @@
             const containerImagem = document.getElementById('containerImagem');
             const nomeVendedorResultado = document.getElementById('nomeVendedorResultado');
             
+<<<<<<< HEAD
             const IMAGENS = {
                 abaixo: {
                     url: 'https://img.freepik.com/fotos-gratis/militar-que-sofre-de-ptsd_23-2149307525.jpg',
@@ -505,6 +514,24 @@
                 },
                 excelente: {
                     url: 'https://img.freepik.com/fotos-gratis/jovem-mulher-levantando-os-punhos-na-parede-vermelha_114579-47017.jpg?uid=R188991667&ga=GA1.1.561515967.1740640690&semt=ais_hybrid&w=740',
+=======
+            
+            const IMAGENS = {
+                abaixo: {
+                    url: 'https://images.unsplash.com/photo-1546539782-6fc531453083?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+                    frase: 'Não desista! Vamos melhorar juntos!'
+                },
+                media: {
+                    url: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+                    frase: 'Alívio! Meta entregue!'
+                },
+                boa: {
+                    url: 'https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+                    frase: 'Isso aí! Comemorando o sucesso!'
+                },
+                excelente: {
+                    url: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+>>>>>>> 4e653f35bc0f019cb7d799f57e9e33fa17beee59
                     frase: 'Incrível! Performance excepcional!'
                 }
             };
@@ -573,6 +600,10 @@
                 let imagemSelecionada = '';
                 let fraseSelecionada = '';
                 
+<<<<<<< HEAD
+=======
+                
+>>>>>>> 4e653f35bc0f019cb7d799f57e9e33fa17beee59
                 videoExcepcional.classList.remove('mostrar');
                 mensagemVideo.classList.remove('mostrar');
                 containerImagem.classList.add('mostrar');
@@ -604,6 +635,7 @@
                     faixaMultiplicador = "150% ou mais";
                     valorMultiplicador = "1.5x";
                     linhaDestaque = 'linha5';
+<<<<<<< HEAD
                     
                     videoExcepcional.classList.add('mostrar');
                     mensagemVideo.classList.add('mostrar');
@@ -611,6 +643,15 @@
                     
                     videoExcepcional.play();
                     
+=======
+                
+                    videoExcepcional.classList.add('mostrar');
+                    mensagemVideo.classList.add('mostrar');
+                    containerImagem.classList.remove('mostrar');
+                
+                    videoExcepcional.play();
+                
+>>>>>>> 4e653f35bc0f019cb7d799f57e9e33fa17beee59
                     nomeVendedorResultado.textContent = nomeVendedor;
                 }
                 
