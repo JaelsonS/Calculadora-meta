@@ -258,6 +258,45 @@
             margin: 20px auto;
             display: block;
             border-radius: 8px;
+            position: relative;
+        }
+        
+        .frase-imagem {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            background-color: rgba(0,0,0,0.7);
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 0 0 8px 8px;
+        }
+        
+        .video-motivacional {
+            width: 100%;
+            max-width: 400px;
+            margin: 20px auto;
+            display: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .mensagem-video {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+            color: var(--azul-praso);
+            display: none;
+        }
+        
+        .lacrou {
+            font-size: 28px;
+            color: #FF5722;
+            text-transform: uppercase;
+            animation: pulse 1s infinite alternate;
         }
         
         @media (min-width: 400px) {
@@ -278,11 +317,20 @@
             .imagem-motivacional {
                 max-width: 400px;
             }
+            
+            .video-motivacional {
+                max-width: 500px;
+            }
         }
         
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
+        }
+        
+        @keyframes pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
         }
     </style>
 </head>
@@ -360,7 +408,20 @@
                 <h2 class="titulo-resultado">Resultado de Performance</h2>
                 <div class="valor-resultado"><span id="porcentagemResultado"></span>%</div>
                 
-                <img id="imagemResultado" src="" alt="Resultado de desempenho" class="imagem-motivacional">
+                <video id="videoExcepcional" class="video-motivacional" autoplay loop muted playsinline>
+                    <source src="https://assets.mixkit.co/videos/preview/mixkit-happy-businessman-dancing-1493-large.mp4" type="video/mp4">
+                    Seu navegador não suporta vídeos HTML5.
+                </video>
+                
+                <div id="mensagemVideo" class="mensagem-video">
+                    <div>PARABÉNS, <span id="nomeVendedorResultado"></span>!</div>
+                    <div class="lacrou">LACROU!</div>
+                </div>
+                
+                <div id="containerImagem">
+                    <img id="imagemResultado" src="" alt="Resultado de desempenho" class="imagem-motivacional">
+                    <div id="fraseImagem" class="frase-imagem"></div>
+                </div>
                 
                 <div class="info-multiplicador">
                     <strong>Faixa de Multiplicador:</strong> <span id="faixaMultiplicador"></span>
@@ -412,7 +473,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-        
             const camposHunter = document.getElementById('camposHunter');
             const camposHunterKA = document.getElementById('camposHunterKA');
             const tipoVendedorRadios = document.getElementsByName('tipoVendedor');
@@ -420,13 +480,30 @@
             const containerResultado = document.getElementById('containerResultado');
             const nomeVendedorInput = document.getElementById('nomeVendedor');
             const imagemResultado = document.getElementById('imagemResultado');
+            const videoExcepcional = document.getElementById('videoExcepcional');
+            const mensagemVideo = document.getElementById('mensagemVideo');
+            const fraseImagem = document.getElementById('fraseImagem');
+            const containerImagem = document.getElementById('containerImagem');
+            const nomeVendedorResultado = document.getElementById('nomeVendedorResultado');
+            
             
             const IMAGENS = {
-                abaixo: 'https://images.unsplash.com/photo-1545167622-3a6ac756afa4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
-                media: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
-                boa: 'https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
-                excelente: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
-                excepcional: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
+                abaixo: {
+                    url: 'https://images.unsplash.com/photo-1546539782-6fc531453083?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+                    frase: 'Não desista! Vamos melhorar juntos!'
+                },
+                media: {
+                    url: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+                    frase: 'Alívio! Meta entregue!'
+                },
+                boa: {
+                    url: 'https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+                    frase: 'Isso aí! Comemorando o sucesso!'
+                },
+                excelente: {
+                    url: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
+                    frase: 'Incrível! Performance excepcional!'
+                }
             };
             
             tipoVendedorRadios.forEach(radio => {
@@ -491,43 +568,58 @@
                 let faixaMultiplicador, valorMultiplicador;
                 let linhaDestaque = '';
                 let imagemSelecionada = '';
+                let fraseSelecionada = '';
+                
+                
+                videoExcepcional.classList.remove('mostrar');
+                mensagemVideo.classList.remove('mostrar');
+                containerImagem.classList.add('mostrar');
                 
                 if (porcentagem < 100) {
                     faixaMultiplicador = "Abaixo de 100%";
                     valorMultiplicador = "1.0x";
-                    imagemSelecionada = IMAGENS.abaixo;
+                    imagemSelecionada = IMAGENS.abaixo.url;
+                    fraseSelecionada = IMAGENS.abaixo.frase;
                 } else if (porcentagem >= 100 && porcentagem < 110) {
                     faixaMultiplicador = "100% - 109.99%";
                     valorMultiplicador = "1.0x";
                     linhaDestaque = 'linha1';
-                    imagemSelecionada = IMAGENS.media;
+                    imagemSelecionada = IMAGENS.media.url;
+                    fraseSelecionada = IMAGENS.media.frase;
                 } else if (porcentagem >= 110 && porcentagem < 130) {
                     faixaMultiplicador = "110% - 129.99%";
                     valorMultiplicador = "1.2x";
                     linhaDestaque = 'linha2';
-                    imagemSelecionada = IMAGENS.boa;
-                } else if (porcentagem >= 130 && porcentagem < 140) {
-                    faixaMultiplicador = "130% - 139.99%";
+                    imagemSelecionada = IMAGENS.boa.url;
+                    fraseSelecionada = IMAGENS.boa.frase;
+                } else if (porcentagem >= 130 && porcentagem < 150) {
+                    faixaMultiplicador = "130% - 149.99%";
                     valorMultiplicador = "1.3x";
                     linhaDestaque = 'linha3';
-                    imagemSelecionada = IMAGENS.excelente;
-                } else if (porcentagem >= 140 && porcentagem < 150) {
-                    faixaMultiplicador = "140% - 149.99%";
-                    valorMultiplicador = "1.4x";
-                    linhaDestaque = 'linha4';
-                    imagemSelecionada = IMAGENS.excelente;
+                    imagemSelecionada = IMAGENS.excelente.url;
+                    fraseSelecionada = IMAGENS.excelente.frase;
                 } else {
                     faixaMultiplicador = "150% ou mais";
                     valorMultiplicador = "1.5x";
                     linhaDestaque = 'linha5';
-                    imagemSelecionada = IMAGENS.excepcional;
+                
+                    videoExcepcional.classList.add('mostrar');
+                    mensagemVideo.classList.add('mostrar');
+                    containerImagem.classList.remove('mostrar');
+                
+                    videoExcepcional.play();
+                
+                    nomeVendedorResultado.textContent = nomeVendedor;
                 }
                 
                 document.getElementById('porcentagemResultado').textContent = porcentagem;
                 document.getElementById('faixaMultiplicador').textContent = faixaMultiplicador;
                 document.getElementById('valorMultiplicador').textContent = valorMultiplicador;
-                imagemResultado.src = imagemSelecionada;
-                imagemResultado.alt = `Desempenho ${porcentagem}% - ${faixaMultiplicador}`;
+                
+                if (porcentagem < 150) {
+                    imagemResultado.src = imagemSelecionada;
+                    fraseImagem.textContent = fraseSelecionada;
+                }
                 
                 for (let i = 1; i <= 5; i++) {
                     document.getElementById('linha' + i).classList.remove('destaque');
