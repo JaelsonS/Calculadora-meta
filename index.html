@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="https://praso.com.br/assets/logo-praso-footer-c-21WO2g.png" type="image/x-icon">
+    <title>Calculadora de Meta - Praso</title>
+    <style>
+        :root {
+            --azul-praso: #1a237e;
+            --azul-claro-praso: #3949ab;
+            --destaque-praso: #00bcd4;
+            --branco: #ffffff;
+            --cinza-claro: #f5f5f5;
+            --cinza-escuro: #333333;
+            --feliz: #4CAF50;
+            --neutro: #FFC107;
+            --triste: #F44336;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(#333333);
+            color: var(--cinza-escuro);
+            line-height: 1.6;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            background-color: var(--branco);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .cabecalho {
+            background: linear-gradient(135deg, var(--azul-praso), var(--azul-claro-praso));
+            color: var(--branco);
+            padding: 20px 15px;
+            text-align: center;
+        }
+        
+        .logo {
+            max-width: 180px;
+            margin: 0 auto 10px;
+            display: block;
+        }
+        
+        .titulo-principal {
+            font-size: 22px;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .subtitulo {
+            font-size: 16px;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+        
+        .conteudo {
+            padding: 20px 15px;
+            flex: 1;
+        }
+        
+        .grupo-formulario {
+            margin-bottom: 18px;
+        }
+        
+        .rotulo {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--azul-praso);
+            font-size: 15px;
+        }
+        
+        .entrada-texto,
+        .entrada-numero,
+        .selecao,
+        .area-texto {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+        
+        .entrada-texto:focus,
+        .entrada-numero:focus,
+        .selecao:focus,
+        .area-texto:focus {
+            border-color: var(--azul-claro-praso);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(57, 73, 171, 0.2);
+        }
+        
+        .grupo-radio {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .opcao-radio {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 15px;
+        }
+        
+        .botao {
+            background: linear-gradient(135deg, var(--azul-claro-praso), var(--azul-praso));
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            width: 100%;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        .botao:hover {
+            opacity: 0.9;
+        }
+        
+        .botao-secundario {
+            background: white;
+            color: var(--azul-praso);
+            border: 2px solid var(--azul-praso);
+        }
+        
+        .container-resultado {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .titulo-resultado {
+            color: var(--azul-praso);
+            margin-top: 0;
+            font-size: 20px;
+            text-align: center;
+        }
+        
+        .valor-resultado {
+            font-size: 32px;
+            font-weight: 700;
+            margin: 15px 0;
+            color: var(--azul-praso);
+            text-align: center;
+        }
+        
+        .info-multiplicador {
+            background: linear-gradient(135deg, var(--azul-praso), var(--azul-claro-praso));
+            color: white;
+            padding: 12px;
+            border-radius: 6px;
+            margin: 15px 0;
+            font-size: 14px;
+        }
+        
+        .tabela-multiplicador {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 14px;
+        }
+        
+        .tabela-multiplicador th, .tabela-multiplicador td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        
+        .tabela-multiplicador th {
+            background-color: var(--azul-praso);
+            color: white;
+            font-weight: 500;
+        }
+        
+        .tabela-multiplicador tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .destaque {
+            background-color: #fffacd !important;
+            font-weight: bold;
+        }
+        
+        .mensagem {
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 20px;
+            font-size: 15px;
+        }
+        
+        .sucesso {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border-left: 4px solid #4caf50;
+        }
+        
+        .aviso {
+            background-color: #fff8e1;
+            color: #ff8f00;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .erro {
+            background-color: #ffebee;
+            color: #c62828;
+            border-left: 4px solid #f44336;
+        }
+        
+        .oculto {
+            display: none;
+        }
+        
+        .duas-colunas {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        
+        .rodape {
+            background-color: var(--azul-praso);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 13px;
+        }
+        
+        .logo-rodape {
+            max-width: 120px;
+            margin-bottom: 10px;
+        }
+        
+        .imagem-motivacional {
+            width: 100%;
+            max-width: 300px;
+            margin: 20px auto;
+            display: block;
+            border-radius: 8px;
+        }
+        
+        @media (min-width: 400px) {
+            .duas-colunas {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .container {
+                max-width: 700px;
+                margin: 20px auto;
+                min-height: auto;
+                box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+                border-radius: 8px;
+            }
+            
+            .imagem-motivacional {
+                max-width: 400px;
+            }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="cabecalho">
+            <img src="https://praso.com.br/assets/logo-praso-footer-c-21WO2g.png" alt="Praso Logo" class="logo">
+            <h1 class="titulo-principal">Calculadora de Meta</h1>
+            <div class="subtitulo">Acompanhe seu desempenho e alcance seus objetivos</div>
+        </div>
+        
+        <div class="conteudo">
+            <div class="grupo-formulario">
+                <label for="nomeVendedor" class="rotulo">Nome do Vendedor:</label>
+                <input type="text" id="nomeVendedor" class="entrada-texto" placeholder="Digite seu nome" required>
+            </div>
+            
+            <div class="grupo-formulario">
+                <label class="rotulo">Tipo de Vendedor:</label>
+                <div class="grupo-radio">
+                    <div class="opcao-radio">
+                        <input type="radio" id="hunter" name="tipoVendedor" value="hunter" checked>
+                        <label for="hunter">Hunter</label>
+                    </div>
+                    <div class="opcao-radio">
+                        <input type="radio" id="hunterKA" name="tipoVendedor" value="hunterKA">
+                        <label for="hunterKA">Hunter KA</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="camposHunter">
+                <h3 style="color: var(--azul-praso); margin-bottom: 10px;">Dados de Recorrência (75%)</h3>
+                <div class="duas-colunas">
+                    <div class="grupo-formulario">
+                        <label for="recorrenciaRealizado" class="rotulo">Realizado:</label>
+                        <input type="number" id="recorrenciaRealizado" class="entrada-numero" placeholder="Valor realizado" step="0.01" required>
+                    </div>
+                    <div class="grupo-formulario">
+                        <label for="recorrenciaMeta" class="rotulo">Meta:</label>
+                        <input type="number" id="recorrenciaMeta" class="entrada-numero" placeholder="Valor da meta" step="0.01" required>
+                    </div>
+                </div>
+                
+                <h3 style="color: var(--azul-praso); margin-bottom: 10px;">Dados de Onboarding (25%)</h3>
+                <div class="duas-colunas">
+                    <div class="grupo-formulario">
+                        <label for="scoreRealizado" class="rotulo">Score Realizado:</label>
+                        <input type="number" id="scoreRealizado" class="entrada-numero" placeholder="Valor realizado" step="0.01" required>
+                    </div>
+                    <div class="grupo-formulario">
+                        <label for="scoreMeta" class="rotulo">Meta Score:</label>
+                        <input type="number" id="scoreMeta" class="entrada-numero" placeholder="Valor da meta" step="0.01" required>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="camposHunterKA" class="oculto">
+                <h3 style="color: var(--azul-praso); margin-bottom: 10px;">Dados de Aquisição (100%)</h3>
+                <div class="duas-colunas">
+                    <div class="grupo-formulario">
+                        <label for="aquisicaoRealizado" class="rotulo">Realizado:</label>
+                        <input type="number" id="aquisicaoRealizado" class="entrada-numero" placeholder="Valor realizado" step="0.01" required>
+                    </div>
+                    <div class="grupo-formulario">
+                        <label for="aquisicaoMeta" class="rotulo">Meta:</label>
+                        <input type="number" id="aquisicaoMeta" class="entrada-numero" value="15" step="0.01" required>
+                    </div>
+                </div>
+            </div>
+            
+            <button id="botaoCalcular" class="botao">Calcular Minha Meta</button>
+            
+            <div id="containerResultado" class="container-resultado">
+                <h2 class="titulo-resultado">Resultado de Performance</h2>
+                <div class="valor-resultado"><span id="porcentagemResultado"></span>%</div>
+                
+                <img src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Sucesso nos negócios" class="imagem-motivacional">
+                
+                <div class="info-multiplicador">
+                    <strong>Faixa de Multiplicador:</strong> <span id="faixaMultiplicador"></span>
+                    <br>
+                    <strong>Multiplicador Aplicado:</strong> <span id="valorMultiplicador"></span>
+                </div>
+                
+                <table class="tabela-multiplicador">
+                    <thead>
+                        <tr>
+                            <th>Faixa de Atingimento</th>
+                            <th>Multiplicador</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr id="linha1">
+                            <td>100% até 109.99%</td>
+                            <td>1.0x</td>
+                        </tr>
+                        <tr id="linha2">
+                            <td>110% até 129.99%</td>
+                            <td>1.2x</td>
+                        </tr>
+                        <tr id="linha3">
+                            <td>130% até 139.99%</td>
+                            <td>1.3x</td>
+                        </tr>
+                        <tr id="linha4">
+                            <td>140% até 149.99%</td>
+                            <td>1.4x</td>
+                        </tr>
+                        <tr id="linha5">
+                            <td>150% ou mais</td>
+                            <td>1.5x</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div id="mensagem" class="mensagem"></div>
+            </div>
+        </div>
+        
+        <div class="rodape">
+            <img src="https://praso.com.br/assets/logo-praso-footer-c-21WO2g.png" alt="Praso Logo" class="logo-rodape">
+            <p>Calculadora de Metas - Praso Plataforma de Compras</p>
+            <p>Desenvolvido por Jaelson Santos</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        
+            const camposHunter = document.getElementById('camposHunter');
+            const camposHunterKA = document.getElementById('camposHunterKA');
+            const tipoVendedorRadios = document.getElementsByName('tipoVendedor');
+            const botaoCalcular = document.getElementById('botaoCalcular');
+            const containerResultado = document.getElementById('containerResultado');
+            const nomeVendedorInput = document.getElementById('nomeVendedor');
+            
+            tipoVendedorRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.value === 'hunter') {
+                        camposHunter.classList.remove('oculto');
+                        camposHunterKA.classList.add('oculto');
+                    } else {
+                        camposHunter.classList.add('oculto');
+                        camposHunterKA.classList.remove('oculto');
+                    }
+                });
+            });
+            
+            function calcularMeta() {
+                const nomeVendedor = nomeVendedorInput.value.trim();
+                const tipoVendedor = document.querySelector('input[name="tipoVendedor"]:checked').value;
+                
+                if (!nomeVendedor) {
+                    alert('Por favor, insira seu nome.');
+                    return;
+                }
+                
+                let porcentagem, multiplicador;
+                
+                if (tipoVendedor === 'hunter') {
+                    const recRealizado = parseFloat(document.getElementById('recorrenciaRealizado').value);
+                    const recMeta = parseFloat(document.getElementById('recorrenciaMeta').value);
+                    const scoreRealizado = parseFloat(document.getElementById('scoreRealizado').value);
+                    const scoreMeta = parseFloat(document.getElementById('scoreMeta').value);
+                    
+                    if (isNaN(recRealizado) || isNaN(recMeta) || isNaN(scoreRealizado) || isNaN(scoreMeta)) {
+                        alert('Por favor, preencha todos os campos para o cálculo Hunter.');
+                        return;
+                    }
+                    
+                    if (recMeta === 0 || scoreMeta === 0) {
+                        alert('A meta não pode ser zero.');
+                        return;
+                    }
+                    
+                    porcentagem = ((recRealizado / recMeta) * 0.75 + (scoreRealizado / scoreMeta) * 0.25) * 100;
+                } else {
+                    const aquisicaoRealizado = parseFloat(document.getElementById('aquisicaoRealizado').value);
+                    const aquisicaoMeta = parseFloat(document.getElementById('aquisicaoMeta').value);
+                    
+                    if (isNaN(aquisicaoRealizado) || isNaN(aquisicaoMeta)) {
+                        alert('Por favor, preencha todos os campos para o cálculo Hunter KA.');
+                        return;
+                    }
+                    
+                    if (aquisicaoMeta === 0) {
+                        alert('A meta não pode ser zero.');
+                        return;
+                    }
+                    
+                    porcentagem = (aquisicaoRealizado / aquisicaoMeta) * 100;
+                }
+                
+                porcentagem = Math.round(porcentagem * 100) / 100;
+                
+                let faixaMultiplicador, valorMultiplicador;
+                let linhaDestaque = '';
+                
+                if (porcentagem < 100) {
+                    faixaMultiplicador = "Abaixo de 100%";
+                    valorMultiplicador = "1.0x";
+                } else if (porcentagem >= 100 && porcentagem < 110) {
+                    faixaMultiplicador = "100% - 109.99%";
+                    valorMultiplicador = "1.0x";
+                    linhaDestaque = 'linha1';
+                } else if (porcentagem >= 110 && porcentagem < 130) {
+                    faixaMultiplicador = "110% - 129.99%";
+                    valorMultiplicador = "1.2x";
+                    linhaDestaque = 'linha2';
+                } else if (porcentagem >= 130 && porcentagem < 140) {
+                    faixaMultiplicador = "130% - 139.99%";
+                    valorMultiplicador = "1.3x";
+                    linhaDestaque = 'linha3';
+                } else if (porcentagem >= 140 && porcentagem < 150) {
+                    faixaMultiplicador = "140% - 149.99%";
+                    valorMultiplicador = "1.4x";
+                    linhaDestaque = 'linha4';
+                } else {
+                    faixaMultiplicador = "150% ou mais";
+                    valorMultiplicador = "1.5x";
+                    linhaDestaque = 'linha5';
+                }
+                
+                document.getElementById('porcentagemResultado').textContent = porcentagem;
+                document.getElementById('faixaMultiplicador').textContent = faixaMultiplicador;
+                document.getElementById('valorMultiplicador').textContent = valorMultiplicador;
+                
+                for (let i = 1; i <= 5; i++) {
+                    document.getElementById('linha' + i).classList.remove('destaque');
+                }
+                
+                if (linhaDestaque) {
+                    document.getElementById(linhaDestaque).classList.add('destaque');
+                }
+                
+                const mensagemElemento = document.getElementById('mensagem');
+                mensagemElemento.className = 'mensagem';
+                
+                if (porcentagem < 80) {
+                    mensagemElemento.classList.add('erro');
+                    mensagemElemento.innerHTML = `<strong>Precisamos melhorar, ${nomeVendedor}!</strong><br>
+                        Seu desempenho está abaixo do esperado (${porcentagem}%). Vamos analisar juntos onde podemos melhorar e traçar um plano de ação para alcançar a meta. Você é capaz de muito mais!`;
+                } else if (porcentagem >= 80 && porcentagem < 100) {
+                    mensagemElemento.classList.add('aviso');
+                    mensagemElemento.innerHTML = `<strong>Quase lá, ${nomeVendedor}!</strong><br>
+                        Você está no caminho certo (${porcentagem}%), mas ainda falta um pouco para bater a meta. Ajuste o foco nas oportunidades que podem te levar aos 100%! Estou torcendo por você!`;
+                } else {
+                    mensagemElemento.classList.add('sucesso');
+                    mensagemElemento.innerHTML = `<strong>Parabéns, ${nomeVendedor}!</strong><br>
+                        Excelente trabalho! Você não apenas atingiu como superou a meta (${porcentagem}%). Continue com esse desempenho excepcional! Você é um exemplo para toda a equipe!`;
+                }
+                
+                containerResultado.style.display = 'block';
+                
+                setTimeout(() => {
+                    containerResultado.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 100);
+            }
+            
+            botaoCalcular.addEventListener('click', calcularMeta);
+            
+            document.querySelectorAll('.entrada-texto, .entrada-numero').forEach(input => {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        calcularMeta();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
