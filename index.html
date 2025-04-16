@@ -277,6 +277,7 @@
         .video-motivacional {
             width: 100%;
             max-width: 400px;
+            height: auto;
             margin: 20px auto;
             display: none;
             border-radius: 8px;
@@ -412,12 +413,8 @@
                 <h2 class="titulo-resultado">Resultado de Performance</h2>
                 <div class="valor-resultado"><span id="porcentagemResultado"></span>%</div>
                 
-                <video id="videoExcepcional" class="video-motivacional" autoplay loop muted playsinline>
-<<<<<<< HEAD
+                <video id="videoExcepcional" class="video-motivacional" loop muted playsinline>
                     <source src="Arquivos/jeff.mp4" type="video/mp4">
-=======
-                    <source src="https://assets.mixkit.co/videos/preview/mixkit-happy-businessman-dancing-1493-large.mp4" type="video/mp4">
->>>>>>> 4e653f35bc0f019cb7d799f57e9e33fa17beee59
                     Seu navegador não suporta vídeos HTML5.
                 </video>
                 
@@ -426,11 +423,7 @@
                     <div class="lacrou">LACROU!</div>
                 </div>
                 
-<<<<<<< HEAD
                 <div id="containerImagem" class="mostrar">
-=======
-                <div id="containerImagem">
->>>>>>> 4e653f35bc0f019cb7d799f57e9e33fa17beee59
                     <img id="imagemResultado" src="" alt="Resultado de desempenho" class="imagem-motivacional">
                     <div id="fraseImagem" class="frase-imagem"></div>
                 </div>
@@ -498,40 +491,21 @@
             const containerImagem = document.getElementById('containerImagem');
             const nomeVendedorResultado = document.getElementById('nomeVendedorResultado');
             
-<<<<<<< HEAD
             const IMAGENS = {
                 abaixo: {
-                    url: 'https://img.freepik.com/fotos-gratis/militar-que-sofre-de-ptsd_23-2149307525.jpg',
+                    url: 'https://img.freepik.com/fotos-gratis/retrato-de-mulher-mostrando-emocoes-fortes-representando-saude-mental_23-2151718772.jpg?uid=R188991667&ga=GA1.1.561515967.1740640690&semt=ais_hybrid&w=740',
                     frase: 'Não desista! Vamos melhorar juntos!'
                 },
                 media: {
-                    url: 'https://img.freepik.com/fotos-gratis/jovem-entregador-de-uniforme-vermelho-e-bone-de-maos-cruzadas-no-peito-com-os-olhos-fechados-sentindo-emocoes-positivas_141793-46331.jpg',
+                    url: 'https://img.freepik.com/fotos-gratis/jovem-entregador-de-uniforme-vermelho-e-bone-relaxando-com-os-olhos-fechados-fazendo-gestos-de-meditacao-com-os-dedos_141793-46413.jpg?uid=R188991667&ga=GA1.1.561515967.1740640690&semt=ais_hybrid&w=740',
                     frase: 'Alívio! Meta entregue!'
                 },
                 boa: {
-                    url: 'https://img.freepik.com/psd-gratuitas/expressiva-mulher-gesticulando_23-2150199057.jpg',
+                    url: 'https://img.freepik.com/fotos-gratis/garota-homossexual-dancando-rindo-levantando-as-maos-e-celebrando-o-conceito-lgbtq-do-mes-do-orgulho-se-divertindo-em-pe-no-branco_176420-39669.jpg?uid=R188991667&ga=GA1.1.561515967.1740640690&semt=ais_hybrid&w=740',
                     frase: 'Isso aí! Comemorando o sucesso!'
                 },
                 excelente: {
-                    url: 'https://img.freepik.com/fotos-gratis/jovem-mulher-levantando-os-punhos-na-parede-vermelha_114579-47017.jpg?uid=R188991667&ga=GA1.1.561515967.1740640690&semt=ais_hybrid&w=740',
-=======
-            
-            const IMAGENS = {
-                abaixo: {
-                    url: 'https://images.unsplash.com/photo-1546539782-6fc531453083?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
-                    frase: 'Não desista! Vamos melhorar juntos!'
-                },
-                media: {
-                    url: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
-                    frase: 'Alívio! Meta entregue!'
-                },
-                boa: {
-                    url: 'https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
-                    frase: 'Isso aí! Comemorando o sucesso!'
-                },
-                excelente: {
-                    url: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
->>>>>>> 4e653f35bc0f019cb7d799f57e9e33fa17beee59
+                    url: 'https://img.freepik.com/fotos-gratis/jovem-hispanica-vestindo-roupas-casuais-animadas-para-o-sucesso-com-os-bracos-levantados-e-os-olhos-fechados-comemorando-a-vitoria-sorrindo-conceito-de-vencedor_839833-19430.jpg?uid=R188991667&ga=GA1.1.561515967.1740640690&semt=ais_hybrid&w=740',
                     frase: 'Incrível! Performance excepcional!'
                 }
             };
@@ -600,13 +574,12 @@
                 let imagemSelecionada = '';
                 let fraseSelecionada = '';
                 
-<<<<<<< HEAD
-=======
                 
->>>>>>> 4e653f35bc0f019cb7d799f57e9e33fa17beee59
                 videoExcepcional.classList.remove('mostrar');
                 mensagemVideo.classList.remove('mostrar');
                 containerImagem.classList.add('mostrar');
+                videoExcepcional.pause();
+                videoExcepcional.currentTime = 0;
                 
                 if (porcentagem < 100) {
                     faixaMultiplicador = "Abaixo de 100%";
@@ -635,29 +608,24 @@
                     faixaMultiplicador = "150% ou mais";
                     valorMultiplicador = "1.5x";
                     linhaDestaque = 'linha5';
-<<<<<<< HEAD
+                    
                     
                     videoExcepcional.classList.add('mostrar');
                     mensagemVideo.classList.add('mostrar');
                     containerImagem.classList.remove('mostrar');
                     
-                    videoExcepcional.play();
+                   
+                    videoExcepcional.load();
+                    videoExcepcional.play().catch(e => console.log("Autoplay não permitido:", e));
                     
-=======
-                
-                    videoExcepcional.classList.add('mostrar');
-                    mensagemVideo.classList.add('mostrar');
-                    containerImagem.classList.remove('mostrar');
-                
-                    videoExcepcional.play();
-                
->>>>>>> 4e653f35bc0f019cb7d799f57e9e33fa17beee59
+                    
                     nomeVendedorResultado.textContent = nomeVendedor;
                 }
                 
                 document.getElementById('porcentagemResultado').textContent = porcentagem;
                 document.getElementById('faixaMultiplicador').textContent = faixaMultiplicador;
                 document.getElementById('valorMultiplicador').textContent = valorMultiplicador;
+                
                 
                 if (porcentagem < 150) {
                     imagemResultado.src = imagemSelecionada;
@@ -673,7 +641,7 @@
                     document.getElementById(linhaDestaque).classList.add('destaque');
                 }
                 
-               
+                
                 const mensagemElemento = document.getElementById('mensagem');
                 mensagemElemento.className = 'mensagem';
                 
@@ -691,7 +659,9 @@
                         Excelente trabalho! Você não apenas atingiu como superou a meta (${porcentagem}%). Continue com esse desempenho excepcional! Você é um exemplo para toda a equipe!`;
                 }
                 
+                
                 containerResultado.style.display = 'block';
+                
                 
                 setTimeout(() => {
                     containerResultado.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -699,6 +669,7 @@
             }
             
             botaoCalcular.addEventListener('click', calcularMeta);
+            
             
             document.querySelectorAll('.entrada-texto, .entrada-numero').forEach(input => {
                 input.addEventListener('keypress', function(e) {
